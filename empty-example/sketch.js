@@ -10,7 +10,7 @@ let sytost = 150;
 let hladoveni = 0.6;
 let jidloGain = 80;
 let jidloRychlost = 2;
-let pooLoss = 10;
+let pooLoss = 40;
 let pooHranice = 200;
 
 let time = 0;
