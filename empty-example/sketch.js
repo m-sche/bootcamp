@@ -1,35 +1,35 @@
 // do not remove, allowes autocomplete
 /// <reference path="./../p5.global-mode.d.ts" />
 
-let img;
+let meals = ["🍗", "🥩", "🥓", "🌮", "🍱", "🍞", "🍦"];
 
 let canvassize = 600;
 let imgsize = 30;
 
-let sytost = 100;
+let sytost = 150;
 let hladoveni = 0.6;
 let jidloGain = 40;
 let jidloRychlost = 2;
 let pooLoss = 80;
 let pooHranice = 200;
 
-let jidlo = {};
+let jidlo = [];
 let poos = {};
 
 function setup() {
 	createCanvas(canvassize, canvassize);
 	angleMode(DEGREES);
-	img = loadImage("chicken-512.png");
-	imgpoo = loadImage("poo.png");
+	pozadi = loadImage("pozadi.png");
 
-	spawn(0);
-	spawn(canvassize / 2);
-	spawn(canvassize / 3);
-	spawn(canvassize / 4);
+	for (let i = 0; i < 4; i++)
+		jidlo[i] = randomJidlo();
 }
 
-function spawn(offset) {
-	jidlo[Math.random()] = {offset};
+function randomJidlo() {
+	return {
+		offset: Math.random() * canvassize / 4,
+		img: meals[Math.floor(Math.random() * meals.length)]
+	};
 }
 
 function spawnPoo() {
@@ -42,16 +42,18 @@ function draw() {
 	if (sytost < 0)
 		sytost = 0;
 
-	background("gray");
+	image(pozadi, 0, 0, canvassize, canvassize);
+
+	textSize(imgsize);
+	textAlign(CENTER);
 
 	for (let j in jidlo) {
-		image(img, jidlo[j].offset, (canvassize - imgsize) / 2, imgsize, imgsize);
+		text(jidlo[j].img, jidlo[j].offset, (canvassize + imgsize) / 2);
 
 		jidlo[j].offset += jidloRychlost;
 		if (jidlo[j].offset + sytost / 2 > canvassize * 3 / 4) {
 			sytost += jidloGain;
-			delete jidlo[j];
-			spawn(Math.random() * canvassize / 4);
+			jidlo[j] = randomJidlo();
 		}
 	}
 
@@ -59,7 +61,7 @@ function draw() {
 		spawnPoo();
 
 	for (let p in poos) {
-		image(imgpoo, canvassize * 3 / 4 - imgsize / 2, poos[p].offset, imgsize, imgsize);
+		text("💩", canvassize * 3 / 4, poos[p].offset);
 
 		poos[p].offset += jidloRychlost;
 		if (poos[p].offset > canvassize)
@@ -70,8 +72,9 @@ function draw() {
 	stroke("brown");
 	strokeWeight(3);
 	fill("pink");
+	textSize(sytost / 2);
+	line(canvassize * 3 / 4 - sytost / 2, canvassize / 2 - sytost / 2 - 10, canvassize * 3 / 4 + sytost / 2, canvassize / 2 + sytost / 2 + 10)
+	line(canvassize * 3 / 4 - sytost / 2, canvassize / 2 + sytost / 2 + 10, canvassize * 3 / 4 + sytost / 2, canvassize / 2 - sytost / 2 - 10)
 	ellipse(canvassize * 3 / 4, canvassize / 2, sytost, sytost);
-
-	// textSize()
-	// text("", x, y)
+	text("😋", canvassize * 3 / 4, canvassize / 2 - sytost / 2);
 }
