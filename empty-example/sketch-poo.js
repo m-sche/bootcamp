@@ -8,10 +8,12 @@ let imgsize = 30;
 
 let sytost = 150;
 let hladoveni = 0.6;
-let jidloGain = 40;
+let jidloGain = 80;
 let jidloRychlost = 2;
-let pooLoss = 80;
+let pooLoss = 40;
 let pooHranice = 200;
+
+let time = 0;
 
 let jidlo = [];
 let poos = {};
@@ -38,6 +40,7 @@ function spawnPoo() {
 }
 
 function draw() { 
+	time = time + 1;
 	sytost -= hladoveni;
 	if (sytost < 0)
 		sytost = 0;
@@ -57,7 +60,7 @@ function draw() {
 		}
 	}
 
-	if (sytost > pooHranice)
+	if (time % 10 == 0 && sytost > pooHranice)
 		spawnPoo();
 
 	for (let p in poos) {
