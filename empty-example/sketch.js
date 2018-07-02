@@ -1,80 +1,39 @@
 // do not remove, allowes autocomplete
 /// <reference path="./../p5.global-mode.d.ts" />
 
-let meals = ["🍗", "🥩", "🥓", "🌮", "🍱", "🍞", "🍦"];
-
-let canvassize = 600;
-let imgsize = 30;
-
-let sytost = 150;
-let hladoveni = 0.6;
-let jidloGain = 40;
-let jidloRychlost = 2;
-let pooLoss = 80;
-let pooHranice = 200;
-
-let jidlo = [];
-let poos = {};
+var threshold = 200;
+var time = 0;
+var fullness = 0;
 
 function setup() {
-	createCanvas(canvassize, canvassize);
-	angleMode(DEGREES);
-	pozadi = loadImage("pozadi.png");
-
-	for (let i = 0; i < 4; i++)
-		jidlo[i] = randomJidlo();
+  createCanvas(windowWidth, windowHeight);
+  colorMode(HSB, 100);
 }
 
-function randomJidlo() {
-	return {
-		offset: Math.random() * canvassize / 4,
-		img: meals[Math.floor(Math.random() * meals.length)]
-	};
+function draw() {
+  fill(random(0, 100), 100, 100);
+  textSize(30);
+  textStyle(BOLD);
+  time = time +1;
+
+  znalost();
+  znalost();
+  if (time > 600) {titul();}
+
 }
 
-function spawnPoo() {
-	poos[Math.random()] = {offset: canvassize / 2};
-	sytost -= pooLoss;
+function znalost() {
+  push();
+  translate(random(0, windowWidth), random(0, windowHeight));
+  rotate(random(0, 10));
+  text("znalosti, omg", 0, 0);
+  pop();
 }
 
-function draw() { 
-	sytost -= hladoveni;
-	if (sytost < 0)
-		sytost = 0;
-
-	image(pozadi, 0, 0, canvassize, canvassize);
-
-	textSize(imgsize);
-	textAlign(CENTER);
-
-	for (let j in jidlo) {
-		text(jidlo[j].img, jidlo[j].offset, (canvassize + imgsize) / 2);
-
-		jidlo[j].offset += jidloRychlost;
-		if (jidlo[j].offset + sytost / 2 > canvassize * 3 / 4) {
-			sytost += jidloGain;
-			jidlo[j] = randomJidlo();
-		}
-	}
-
-	if (sytost > pooHranice)
-		spawnPoo();
-
-	for (let p in poos) {
-		text("💩", canvassize * 3 / 4, poos[p].offset);
-
-		poos[p].offset += jidloRychlost;
-		if (poos[p].offset > canvassize)
-			delete poos[p];
-	}
-
-
-	stroke("brown");
-	strokeWeight(3);
-	fill("pink");
-	textSize(sytost / 2);
-	line(canvassize * 3 / 4 - sytost / 2, canvassize / 2 - sytost / 2 - 10, canvassize * 3 / 4 + sytost / 2, canvassize / 2 + sytost / 2 + 10)
-	line(canvassize * 3 / 4 - sytost / 2, canvassize / 2 + sytost / 2 + 10, canvassize * 3 / 4 + sytost / 2, canvassize / 2 - sytost / 2 - 10)
-	ellipse(canvassize * 3 / 4, canvassize / 2, sytost, sytost);
-	text("😋", canvassize * 3 / 4, canvassize / 2 - sytost / 2);
+function titul(){
+fill("black");
+textSize(100);
+textStyle(BOLD);
+textAlign(CENTER);
+text ("Mgr.",windowWidth/2,windowHeight/2);
 }
